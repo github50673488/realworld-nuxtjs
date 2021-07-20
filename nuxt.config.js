@@ -30,6 +30,11 @@ module.exports = {
                             path: '/register',
                             name: 'register',
                             component: resolve(__dirname, 'pages/login/')
+                        },
+                        {
+                            path: '/profile/:username',
+                            name: 'profile',
+                            component: resolve(__dirname, 'pages/profile/')
                         }
                     ]
                 }
