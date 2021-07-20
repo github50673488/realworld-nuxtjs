@@ -4,6 +4,7 @@
 
 module.exports = {
     router: {
+        linkActiveClass: 'active',
         // 自定义路由表规则
         // routes: 一个数组，路由配置表
         // resolve: 解析路由组件路径
