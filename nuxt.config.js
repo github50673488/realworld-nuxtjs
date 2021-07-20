@@ -14,7 +14,14 @@ module.exports = {
             routes.push(...[
                 {
                     path: '/',
-                    component: resolve(__dirname, 'pages/layout/')
+                    component: resolve(__dirname, 'pages/layout/'),
+                    children: [
+                        {
+                            path: '', // 默认子路由
+                            name: 'home',
+                            component: resolve(__dirname, 'pages/home/')
+                        }
+                    ]
                 }
             ])
         }
