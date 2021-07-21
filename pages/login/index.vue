@@ -28,7 +28,9 @@
           <!-- .prevent 阻止默认提交行为 -->
           <form @submit.prevent="onSubmit">
             <fieldset v-if="!isLogin" class="form-group">
-              <input class="form-control form-control-lg" type="text" placeholder="Your Name">
+              <input v-model="user.username" class="form-control form-control-lg" type="text"
+                     placeholder="Your Name please"
+                     required>
             </fieldset>
             <fieldset class="form-group">
               <input v-model="user.email" class="form-control form-control-lg" type="email" placeholder="Email"
@@ -51,16 +53,17 @@
 </template>
 
 <script>
-import {login} from '@/api/user'
+import {login, register} from '@/api/user'
 export default {
   name: 'LoginIndex',
   data() {
     return {
       user: {
+        username: '',
         "email": '',
         "password": ''
       },
-      errors: {} // 错误信息
+      errors: [] // 错误信息
     }
   },
   computed: {
@@ -74,9 +77,14 @@ export default {
       // 提交表单请求登录
       console.log('this.user -->', this.user)
       try {
-        const {data} = await login({
-          user: this.user
-        })
+        // 提交表单请求登录
+        const { data } = this.isLogin
+            ? await login({
+              user: this.user
+            })
+            : await register({
+              user: this.user
+            })
         console.log(data)
         // TODO: 保存用户的登录状态
         // 跳转到首页
