@@ -78,7 +78,7 @@ export default {
       console.log('this.user -->', this.user)
       try {
         // 提交表单请求登录
-        const { data } = this.isLogin
+        const {data} = this.isLogin
             ? await login({
               user: this.user
             })
@@ -86,7 +86,8 @@ export default {
               user: this.user
             })
         console.log(data)
-        // TODO: 保存用户的登录状态
+        // 保存用户的登录状态
+        this.$store.commit('setUser', data.user)
         // 跳转到首页
         this.$router.push('/')
       } catch (e) {
