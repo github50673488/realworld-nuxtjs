@@ -78,9 +78,27 @@
           <nav>
             <ul class="pagination">
 
-              <li class="page-item active">
+              <li
+                  class="page-item"
+                  :class="{
+        active: item === page
+      }"
+                  v-for="item in totalPage"
+                  :key="item"
+              >
 
-                <a class="page-link ng-binding" href="">1</a>
+                <!-- 默认query的改变不会调用asyncData方法。
+                如果要监听这个行为，可以设置应通过页面组建的watchQuery参数监听参数 -->
+                <nuxt-link
+                    class="page-link"
+                    :to="{
+          name: 'home',
+          query: {
+            page: item
+          }
+        }"
+                >{{ item }}
+                </nuxt-link>
 
               </li>
             </ul>
@@ -118,8 +136,8 @@ import {getArticles} from '@/api/article'
 
 export default {
   name: 'HomeIndex',
-  async asyncData() {
-    const page = 1
+  async asyncData({query}) {
+    const page = Number.parseInt(query.page || 1)
     const limit = 10
     const {data} = await getArticles({
       // 文章分页数（默认20）
@@ -129,7 +147,16 @@ export default {
     })
     return {
       articles: data.articles,
-      articlesCount: data.articlesCount
+      articlesCount: data.articlesCount,
+      page,
+      limit
+    }
+  },
+  watchQuery: ['page'],
+  computed: {
+    // 总页码
+    totalPage() {
+      return Math.ceil(this.articlesCount / this.limit)
     }
   }
 }
