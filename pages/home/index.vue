@@ -74,6 +74,18 @@
             </nuxt-link>
           </div>
           <!-- /文章列表 -->
+          <!-- 分页列表 -->
+          <nav>
+            <ul class="pagination">
+
+              <li class="page-item active">
+
+                <a class="page-link ng-binding" href="">1</a>
+
+              </li>
+            </ul>
+          </nav>
+          <!-- /分页列表 -->
 
         </div>
 
@@ -107,8 +119,14 @@ import {getArticles} from '@/api/article'
 export default {
   name: 'HomeIndex',
   async asyncData() {
-    const {data} = await getArticles()
-    console.log(data)
+    const page = 1
+    const limit = 10
+    const {data} = await getArticles({
+      // 文章分页数（默认20）
+      limit,
+      // 文章偏移/跳跃数（默认0）
+      offset: (page - 1) * limit
+    })
     return {
       articles: data.articles,
       articlesCount: data.articlesCount
