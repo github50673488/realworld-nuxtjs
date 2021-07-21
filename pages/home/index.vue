@@ -112,14 +112,12 @@
             <p>Popular Tags</p>
 
             <div class="tag-list">
-              <a href="" class="tag-pill tag-default">programming</a>
-              <a href="" class="tag-pill tag-default">javascript</a>
-              <a href="" class="tag-pill tag-default">emberjs</a>
-              <a href="" class="tag-pill tag-default">angularjs</a>
-              <a href="" class="tag-pill tag-default">react</a>
-              <a href="" class="tag-pill tag-default">mean</a>
-              <a href="" class="tag-pill tag-default">node</a>
-              <a href="" class="tag-pill tag-default">rails</a>
+              <a
+                  href=""
+                  class="tag-pill tag-default"
+                  v-for="item in tags"
+                  :key="item"
+              >{{ item }}</a>
             </div>
           </div>
         </div>
@@ -133,21 +131,28 @@
 
 <script>
 import {getArticles} from '@/api/article'
+import {getTags} from '@/api/tag'
 
 export default {
   name: 'HomeIndex',
   async asyncData({query}) {
     const page = Number.parseInt(query.page || 1)
     const limit = 10
-    const {data} = await getArticles({
-      // 文章分页数（默认20）
-      limit,
-      // 文章偏移/跳跃数（默认0）
-      offset: (page - 1) * limit
-    })
+    const [articleRes, tagRes] = await Promise.all([
+      getArticles({
+        limit, // 文章分页数（默认20）
+        offset: (page - 1) * limit // 文章偏移/跳跃数（默认0）
+      }),
+      getTags()
+    ])
+
+    const {articles, articlesCount} = articleRes.data
+    const {tags} = tagRes.data
+
     return {
-      articles: data.articles,
-      articlesCount: data.articlesCount,
+      articles,
+      articlesCount,
+      tags,
       page,
       limit
     }
