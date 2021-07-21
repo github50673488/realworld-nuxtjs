@@ -59,6 +59,8 @@ import {login, register} from '@/api/user'
 // 运行在客户端为 true; 运行在服务端为 false
 const Cookie = process.client ? require('js-cookie') : undefined
 export default {
+  // 在路由匹配组件渲染之前会先执行中间件处理
+  middleware: ['not-authenticated'],
   name: 'LoginIndex',
   data() {
     return {
