@@ -94,7 +94,8 @@
                     :to="{
           name: 'home',
           query: {
-            page: item
+            page: item,
+            tag: $route.query.tag
           }
         }"
                 >{{ item }}
@@ -107,20 +108,29 @@
 
         </div>
 
+        <!-- 标签列表 -->
         <div class="col-md-3">
           <div class="sidebar">
             <p>Popular Tags</p>
 
             <div class="tag-list">
-              <a
-                  href=""
+              <nuxt-link
+                  :to="{
+                  name: 'home',
+                  query: {
+                    tab: 'tag',
+                    tag: item
+                  }
+                }"
                   class="tag-pill tag-default"
                   v-for="item in tags"
                   :key="item"
-              >{{ item }}</a>
+              >{{ item }}
+              </nuxt-link>
             </div>
           </div>
         </div>
+        <!-- /标签列表 -->
 
       </div>
     </div>
@@ -138,10 +148,12 @@ export default {
   async asyncData({query}) {
     const page = Number.parseInt(query.page || 1)
     const limit = 10
+    const {tag} = query
     const [articleRes, tagRes] = await Promise.all([
       getArticles({
         limit, // 文章分页数（默认20）
-        offset: (page - 1) * limit // 文章偏移/跳跃数（默认0）
+        offset: (page - 1) * limit, // 文章偏移/跳跃数（默认0）
+        tag // 按标签筛选
       }),
       getTags()
     ])
@@ -157,7 +169,7 @@ export default {
       limit
     }
   },
-  watchQuery: ['page'],
+  watchQuery: ['page', 'tag'],
   computed: {
     // 总页码
     totalPage() {
