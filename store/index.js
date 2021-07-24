@@ -1,6 +1,4 @@
-const cookieparser = process.server ? require
-('cookieparser') : undefined
-
+const cookieparser = process.server ? require('cookieparser') : undefined
 
 // 在服务端渲染期间运行的都是同一个实例
 // 为了防止数据冲突
