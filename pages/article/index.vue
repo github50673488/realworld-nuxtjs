@@ -7,24 +7,7 @@
 
         <h1>{{ article.title }}</h1>
 
-        <div class="article-meta">
-          <a href=""><img src="http://i.imgur.com/Qr71crq.jpg"/></a>
-          <div class="info">
-            <a href="" class="author">Eric Simons</a>
-            <span class="date">January 20th</span>
-          </div>
-          <button class="btn btn-sm btn-outline-secondary">
-            <i class="ion-plus-round"></i>
-            &nbsp;
-            Follow Eric Simons <span class="counter">(10)</span>
-          </button>
-          &nbsp;&nbsp;
-          <button class="btn btn-sm btn-outline-primary">
-            <i class="ion-heart"></i>
-            &nbsp;
-            Favorite Post <span class="counter">(29)</span>
-          </button>
-        </div>
+        <article-meta :article="article"/>
 
       </div>
     </div>
@@ -32,7 +15,9 @@
     <div class="container page">
 
       <div class="row article-content">
-        <div class="col-md-12">{{ article.body }}</div>
+        <!--        <div class="col-md-12">{{ article.body }}</div>-->
+        <div class="col-md-12" v-html="article.body"></div>
+        <!--        把Markdown转为HTML-->
       </div>
 
       <hr/>
@@ -118,14 +103,21 @@
 </template>
 
 <script>
-import {getArticles} from '@/api/article'
+
+import {getArticle} from "../../api/article";
+import MarkdownIt from 'markdown-it'
 
 export default {
   name: 'ArticleIndex',
   async asyncData({params}) {
-    const {data} = await getArticles(params.slug)
+
+    // 教程上的网页上的代码有误 写成 getArticles 了
+    const {data} = await getArticle(params.slug)
+    const {article} = data
+    const md = new MarkdownIt
+    article.body = md.render(article.body)
     return {
-      article: data.article
+      article: article
     }
   }
 }
