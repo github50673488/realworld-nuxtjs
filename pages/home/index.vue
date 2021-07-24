@@ -16,7 +16,7 @@
             <ul class="nav nav-pills outline-active">
 
               <li v-if="user" class="nav-item">
-                <!-- exact 精确匹配 -->
+                <!-- exact 精确匹配 Your Feed：只有在登录状态下才被展示-->
                 <nuxt-link
                     class="nav-link"
                     :class="{
@@ -34,6 +34,8 @@
               </li>
 
               <li class="nav-item">
+
+                <!-- Global Feed：不论登录与否均被展示-->
                 <nuxt-link
                     class="nav-link"
                     :class="{
@@ -51,6 +53,7 @@
               </li>
 
               <li v-if="tag" class="nav-item">
+                <!--                #标签：只有在点击某个标签才被展示，切换回Your Deed或Global Feed后不再展示-->
                 <nuxt-link
                     class="nav-link"
                     :class="{
@@ -105,6 +108,8 @@
   }"
                       @click="onFavorite(article)"
                       :disabled="article.favoriteDisabled">
+<!--                如果网络比较慢，用户频繁点击按钮，可能会导致期间来回处理导致出现错误。-->
+                <!--                因此我们应该在请求期间禁用此按钮-->
                 <i class="ion-heart"></i> {{ article.favoritesCount }}
               </button>
             </div>
@@ -209,6 +214,8 @@ export default {
         ? getFeedArticles
         : getArticles
 
+    // 对于多个异步任务，它们之间并没有依赖关系，
+    // 因此我们可以将多个异步任务并发执行。通过并行来提高获取请求加载的速度
     const [articleRes, tagRes] = await Promise.all([
       loadArticles({
         limit, // 文章分页数（默认20）

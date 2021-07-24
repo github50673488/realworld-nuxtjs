@@ -1,6 +1,17 @@
 import {request} from '@/plugins/request'
 
 // 获取公共文章列表
+// 查询参数：
+// 按标签筛选
+//     ?tag=AngularJS
+//     按作者筛选
+//         ?author=jake
+//         按用户筛选
+//             ?favorited=jake
+//             文章分页数（默认20）
+// ?limit=20
+//     文章偏移/跳跃数（默认0）
+// ?offset=0
 export const getArticles = params => {
     return request({
         method: 'GET',
@@ -18,7 +29,7 @@ export const getFeedArticles = params => {
         // headers: {
         //     // 注意数据格式：Token空格数据Token
         //     // 先手动写死，自动处理后续介绍
-        //     Authorization: `Token eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MTg3MjM4LCJ1c2VybmFtZSI6Indvbml1NTA2NzM0ODgiLCJleHAiOjE2MzIwNzE1NjZ9.pfk19o9JWHbgoBlEu1LGqi1OUvDRN5GT61TFOZgPlOA`
+        //     Authorization: `Token eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MTg3MjM4LCJ1c2VybmFtZSI6Indvbml1NTA2NzM0ODgiLCJleHAiOjE2MzIyNjc5ODZ9.zYGxYQ9aXfVHlLJfgQIqZgnZWkVjKBf38AUORPs4cIo`
         // },
         params
     })
